@@ -1,0 +1,11 @@
+version: '3'
+services:
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8070:8070"
+    volumes:
+      - ".:/app"
+    command: tail -f /dev/null
