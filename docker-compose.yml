@@ -8,4 +8,5 @@ services:
       - "8070:8070"
     volumes:
       - ".:/app"
+    container_name: discord-bot
     command: tail -f /dev/null
