@@ -10,7 +10,6 @@ if not os.path.exists(input_dir):
 
 for filename in os.listdir(input_dir):
     if filename.endswith(".pcm"):
-        print("test")
         input_filepath = os.path.join(input_dir, filename)
         output_filename = os.path.join(output_dir, os.path.splitext(filename)[0]+'.wav')
 
