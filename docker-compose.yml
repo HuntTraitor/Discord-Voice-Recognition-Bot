@@ -1,12 +1,17 @@
 version: '3'
 services:
-  bot:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  discord-bot:
+    build: ./discord_bot/.
     ports:
       - "8070:8070"
     volumes:
-      - ".:/app"
-    container_name: discord-bot
+      - "./discord_bot/.:/app"
+    command: tail -f /dev/null
+  
+  transcription-service:
+    build: ./transcription_service/.
+    ports:
+     - "8080:8080"
+    volumes:
+      - "./transcription_service/.:/app"
     command: tail -f /dev/null

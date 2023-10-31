@@ -7,11 +7,12 @@ function createListeningStream(receiver, userId, user) {
     const opusStream = receiver.subscribe(userId, {
         end: {
             behavior: EndBehaviorType.AfterSilence,
-            duration: 100,
+            duration: 500,
         },
     });
 
-    const filename = `./recordings/${user.id}.pcm`;
+    const timestamp = Date.now();
+    const filename = `./recordings/${user.username}_${timestamp}.pcm`;
     const out = fs.createWriteStream(filename);
 
     const opusDecorder = new prism.opus.Decoder({
