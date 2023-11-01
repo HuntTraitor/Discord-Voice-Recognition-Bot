@@ -14,4 +14,7 @@ for item in arr:
     message = open(f"converted_files/{item}").read()
     final_text += f"{username} - {message}\n\n"
 
-print(final_text)
+filename = "finalized/file.txt"
+
+with open(filename, "w") as file:
+    file.write(final_text)
