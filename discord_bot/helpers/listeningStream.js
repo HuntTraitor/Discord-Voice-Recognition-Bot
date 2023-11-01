@@ -12,7 +12,7 @@ function createListeningStream(receiver, userId, user) {
     });
 
     const timestamp = Date.now();
-    const filename = `./recordings/${user.username}_${timestamp}.pcm`;
+    const filename = `./recordings/${user}_${timestamp}.pcm`;
     const out = fs.createWriteStream(filename);
 
     const opusDecorder = new prism.opus.Decoder({

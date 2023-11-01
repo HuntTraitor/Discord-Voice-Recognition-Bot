@@ -15,3 +15,4 @@ services:
     volumes:
       - "./transcription_service/.:/app"
     command: tail -f /dev/null
+    # profiles: ['transcription']
