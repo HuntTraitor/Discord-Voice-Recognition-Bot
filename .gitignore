@@ -3,3 +3,5 @@ node_modules
 discord_bot/recordings/*
 wav
 converted_files
+pcm
+finalized/*

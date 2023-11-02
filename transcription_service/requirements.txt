@@ -1,2 +1,4 @@
 setuptools-rust
 watchdog
+transformers
+torch

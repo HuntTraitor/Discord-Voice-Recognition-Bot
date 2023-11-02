@@ -27,31 +27,6 @@ module.exports = {
             console.log(getFile);
             getFile.createListeningStream(connection.receiver, userId, userId);
         });
-
-        // connection.receiver.subscribe({
-        //     async data(audioData, user) {
-        //         if(user.id == speakingUser) {
-        //             console.log(`Listening to ${speakingUser}...`);
-        //         }
-        //     },
-        // });
-
-        // const membersInVoice = member.voice.channel.members
-        // membersInVoice.forEach((member) => {
-        //     console.log(member.user.tag);
-        // });
-        
-        // const guild = interaction.guild;
-        // const connection = getVoiceConnection(guild.id);
-        // const receiver = connection.receiver;
-
-        // receiver.speaking.on('start', (userId) => {
-        //     console.log(getFile);
-
-        //     console.log(`Channel ID: ${userId}`);
-
-        //     // getFile.createListeningStream(receiver, userId, interaction.user);
-        // });
         await interaction.reply('I am listening......');
     }
 }
