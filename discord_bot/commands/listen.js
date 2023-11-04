@@ -23,8 +23,6 @@ module.exports = {
 
         const connection = getVoiceConnection(interaction.guild.id);
         connection.receiver.speaking.on('start', (userId) => {
-            console.log(userId);
-            console.log(getFile);
             getFile.createListeningStream(connection.receiver, userId, userId);
         });
         await interaction.reply('I am listening......');
