@@ -1,24 +1,20 @@
-// const { pipeline } = require('stream');
 const prism = require('prism-media');
 const net = require('net');
-const dns = require('dns');
-const os = require('os');
-// const fs = require('fs');
 const { EndBehaviorType} = require('@discordjs/voice');
 
 function createListeningStream(receiver, userId, user) {
     const opusStream = receiver.subscribe(userId, {
         end: {
             behavior: EndBehaviorType.AfterSilence,
-            duration: 500,
+            duration: 250,
         },
     });
 
     const socket = new net.Socket();
 
 
-    let ip = '172.18.0.2';
-    const port = '8090';
+    let ip = '10.10.0.3';
+    const port = '8010';
 
     //creating a decoder to use
     const opusDecoder = new prism.opus.Decoder({
@@ -46,7 +42,7 @@ function createListeningStream(receiver, userId, user) {
                 if (err) {
                     console.error('Error sending audio data:',err);
                 } else {
-                    console.log(`Audio data sent successfully to ${ip}:${port}`);
+                    //console.log(`Audio data sent successfully to ${ip}:${port}`);
                 }
             });
         }

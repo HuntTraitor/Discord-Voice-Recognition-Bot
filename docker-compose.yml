@@ -6,13 +6,25 @@ services:
       - "8070:8070"
     volumes:
       - "./discord_bot/.:/app"
-    command: tail -f /dev/null
+    networks:
+      discord:
+        ipv4_address: 10.10.0.2
+    command: node index.js --reload
   
   transcription-service:
     build: ./transcription_service/.
     ports:
-     - "8090:8090"
+     - "8010:8010"
     volumes:
       - "./transcription_service/.:/app"
-    command: tail -f /dev/null
-    # profiles: ['transcription']
+    networks:
+      discord:
+        ipv4_address: 10.10.0.3
+    command: python3 handle_packet.py --reload
+
+networks:
+  discord:
+    ipam:
+      driver: default
+      config:
+      - subnet: "10.10.0.0/16"

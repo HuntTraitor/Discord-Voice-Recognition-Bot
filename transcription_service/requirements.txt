@@ -2,3 +2,4 @@ setuptools-rust
 watchdog
 transformers
 torch
+torchaudio

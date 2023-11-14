@@ -5,3 +5,4 @@ wav
 converted_files
 pcm
 finalized/*
+__pycache__
