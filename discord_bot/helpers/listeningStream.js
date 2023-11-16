@@ -26,17 +26,21 @@ function createListeningStream(receiver, userId, username) {
 
     socket.connect(port, ip, () => {
 
-        const bytes = Buffer.alloc(4)
-
         console.log(`connected to ${ip}:${port}`);
+
+        //encoding the username and getting its encoded length
         const username_buffer = Buffer.from(username, 'utf-8')
-        const buffer_length = username_buffer.length
+        const username_length = username_buffer.length
         
-        bytes.writeInt32LE(buffer_length, 0);
+        //creating a new 4 byte buffer and write the length into it
+        const bytes = Buffer.alloc(4)
+        bytes.writeInt32LE(username_length, 0);
         
-        const combinedBuffer = Buffer.alloc(4 + buffer_length);
-        combinedBuffer.writeUInt32LE(buffer_length, 0);
+        //allocating 4 bytes to the start of the username buffer, writing the length to it, and combining it with the encoded username
+        const combinedBuffer = Buffer.alloc(4 + username_length);
+        combinedBuffer.writeUInt32LE(username_length, 0);
         username_buffer.copy(combinedBuffer, 4);
+
         socket.write(combinedBuffer)
 
         opusStream.on('data', (opusPacket) => {
