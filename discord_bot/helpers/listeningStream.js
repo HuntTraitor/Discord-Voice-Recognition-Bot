@@ -1,12 +1,13 @@
 const prism = require('prism-media');
 const net = require('net');
 const { EndBehaviorType} = require('@discordjs/voice');
+const { embedLength } = require('discord.js');
 
-function createListeningStream(receiver, userId, user) {
+function createListeningStream(receiver, userId, username) {
     const opusStream = receiver.subscribe(userId, {
         end: {
             behavior: EndBehaviorType.AfterSilence,
-            duration: 250,
+            duration: 200,
         },
     });
 
@@ -24,28 +25,38 @@ function createListeningStream(receiver, userId, user) {
     });
 
     socket.connect(port, ip, () => {
+
+        const bytes = Buffer.alloc(4)
+
         console.log(`connected to ${ip}:${port}`);
-    })
-
-    opusStream.on('end', () => {
-        console.log("Closed socket");
-        socket.end();
-    });
-
-    opusStream.on('data', (opusPacket) => {
-
-        opusDecoder.write(opusPacket)
-        const pcmAudioStream = opusDecoder.read();
+        const username_buffer = Buffer.from(username, 'utf-8')
+        const buffer_length = username_buffer.length
         
-        if (pcmAudioStream) {
-            socket.write(pcmAudioStream, (err) => {
-                if (err) {
-                    console.error('Error sending audio data:',err);
-                } else {
-                    //console.log(`Audio data sent successfully to ${ip}:${port}`);
-                }
-            });
-        }
+        bytes.writeInt32LE(buffer_length, 0);
+        
+        const combinedBuffer = Buffer.alloc(4 + buffer_length);
+        combinedBuffer.writeUInt32LE(buffer_length, 0);
+        username_buffer.copy(combinedBuffer, 4);
+        socket.write(combinedBuffer)
+
+        opusStream.on('data', (opusPacket) => {
+            opusDecoder.write(opusPacket)
+            const pcmAudioStream = opusDecoder.read();
+            if (pcmAudioStream) {
+                socket.write(pcmAudioStream, (err) => {
+                    if (err) {
+                        console.error('Error sending audio data:',err);
+                    } else {
+                        // console.log(`Audio data sent successfully to ${ip}:${port}`);
+                    }
+                });
+            }
+        });
+
+        opusStream.on('end', () => {
+            console.log("Closed socket");
+            socket.end();
+        });
     });
 }
 

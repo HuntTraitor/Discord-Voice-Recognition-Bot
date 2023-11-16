@@ -20,10 +20,15 @@ module.exports = {
                 adapterCreator: voiceChannel.guild.voiceAdapterCreator,
             });
         }
-
+        const voiceChannel = member.voice.channel;
         const connection = getVoiceConnection(interaction.guild.id);
         connection.receiver.speaking.on('start', (userId) => {
-            getFile.createListeningStream(connection.receiver, userId, userId);
+            //get the username
+            const guildMember = voiceChannel.guild.members.cache.get(userId);
+            const username = guildMember.displayName || guildMember.user.username;
+
+
+            getFile.createListeningStream(connection.receiver, userId, username);
         });
         await interaction.reply('I am listening......');
     }

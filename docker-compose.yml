@@ -9,7 +9,8 @@ services:
     networks:
       discord:
         ipv4_address: 10.10.0.2
-    command: node index.js --reload
+    container_name: bot
+    command: tail -f /dev/null
   
   transcription-service:
     build: ./transcription_service/.
@@ -20,7 +21,8 @@ services:
     networks:
       discord:
         ipv4_address: 10.10.0.3
-    command: python3 handle_packet.py --reload
+    container_name: transcription
+    command: tail -f /dev/null
 
 networks:
   discord:

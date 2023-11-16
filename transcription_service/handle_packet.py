@@ -4,16 +4,35 @@ import threading
 import sys
 from transcribe import transcribe
 import io
+from transformers import pipeline
 
 PORT = 8010
 IP = socket.gethostbyname(socket.gethostname())
 ADDR = (IP, PORT)
+
+# preload the pipeline
+device = "cpu"
+
+pipe = pipeline(
+    "automatic-speech-recognition",
+    model="openai/whisper-small",
+    chunk_length_s=30,
+    device=device
+)
 
 width = 2
 channels = 2
 frame_rate = 48000
 
 def handle_client(client_socket):
+
+    # first packet you recieve should be the username packet according to TCP
+    # This packet has a custom header with the first 4 bytes explaining the username
+    header = client_socket.recv(4)
+    header_length = int.from_bytes(header, byteorder='little')
+    encoded_username = client_socket.recv(header_length)
+    username = encoded_username.decode('utf-8')
+
     data = b''
     try:
         while True:
@@ -34,7 +53,7 @@ def handle_client(client_socket):
 
     wav_data = wav_buffer.getvalue()
     print("starting transcription...")
-    transcribe(wav_data)
+    transcribe(pipe, wav_data, username)
     print("closed connection")
 
 def main():
