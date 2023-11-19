@@ -8,7 +8,7 @@ module.exports = {
         .setName('listen')
         .setDescription('Listen to voice channel'),
     async execute(interaction) {
-        const member = interaction.member;
+        const member = interaction.member; 
 
         if (!interaction.member.voice.channel) {
             return await interaction.reply(`You are not in a voice channel dumbbass @${member.user.tag}`); 
@@ -27,9 +27,12 @@ module.exports = {
             const guildMember = voiceChannel.guild.members.cache.get(userId);
             const username = guildMember.displayName || guildMember.user.username;
 
-
-            getFile.createListeningStream(connection.receiver, userId, username);
+            getFile.createListeningStream(connection.receiver, userId, username, filename);
         });
+        
+        const guildName = interaction.member.guild.id;
+        const filename = `${guildName}-${Date.now()}.txt`
+        console.log(filename)
         await interaction.reply('I am listening......');
     }
 }

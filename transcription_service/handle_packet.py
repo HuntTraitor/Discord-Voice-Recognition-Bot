@@ -5,6 +5,7 @@ import sys
 from transcribe import transcribe
 import io
 from transformers import pipeline
+from datetime import datetime
 
 PORT = 8010
 IP = socket.gethostbyname(socket.gethostname())
@@ -25,13 +26,19 @@ channels = 2
 frame_rate = 48000
 
 def handle_client(client_socket):
-
     # first packet you recieve should be the username packet according to TCP
     # This packet has a custom header with the first 4 bytes explaining the username
-    header = client_socket.recv(4)
-    header_length = int.from_bytes(header, byteorder='little')
-    encoded_username = client_socket.recv(header_length)
+    username_header = client_socket.recv(4)
+    username_length = int.from_bytes(username_header, byteorder='little')
+    encoded_username = client_socket.recv(username_length)
     username = encoded_username.decode('utf-8')
+
+    filename_header = client_socket.recv(4)
+    filename_length = int.from_bytes(filename_header, byteorder='little')
+    encoded_filename = client_socket.recv(filename_length)
+    filename = encoded_filename.decode('utf-8')
+
+    print(f'Name: {username} Filename: {filename}')
 
     data = b''
     try:

@@ -3,7 +3,7 @@ const net = require('net');
 const { EndBehaviorType} = require('@discordjs/voice');
 const { embedLength } = require('discord.js');
 
-function createListeningStream(receiver, userId, username) {
+function createListeningStream(receiver, userId, username, filename) {
     const opusStream = receiver.subscribe(userId, {
         end: {
             behavior: EndBehaviorType.AfterSilence,
@@ -30,18 +30,27 @@ function createListeningStream(receiver, userId, username) {
 
         //encoding the username and getting its encoded length
         const username_buffer = Buffer.from(username, 'utf-8')
+        const filename_buffer = Buffer.from(filename, 'utf-8')
         const username_length = username_buffer.length
+        const filename_length = filename_buffer.length
         
         //creating a new 4 byte buffer and write the length into it
-        const bytes = Buffer.alloc(4)
-        bytes.writeInt32LE(username_length, 0);
+        const username_bytes = Buffer.alloc(4)
+        username_bytes.writeInt32LE(username_length, 0);
+        const filename_bytes = Buffer.alloc(4);
+        filename_bytes.writeInt32LE(filename_length, 0);
         
         //allocating 4 bytes to the start of the username buffer, writing the length to it, and combining it with the encoded username
-        const combinedBuffer = Buffer.alloc(4 + username_length);
-        combinedBuffer.writeUInt32LE(username_length, 0);
-        username_buffer.copy(combinedBuffer, 4);
+        const combined_username_buffer = Buffer.alloc(4 + username_length);
+        combined_username_buffer.writeUInt32LE(username_length, 0);
+        username_buffer.copy(combined_username_buffer, 4);
 
-        socket.write(combinedBuffer)
+        const combined_filename_buffer = Buffer.alloc(4 + filename_length);
+        combined_filename_buffer.writeUInt32LE(filename_length, 0);
+        filename_buffer.copy(combined_filename_buffer, 4); 
+
+        socket.write(combined_username_buffer);
+        socket.write(combined_filename_buffer);
 
         opusStream.on('data', (opusPacket) => {
             opusDecoder.write(opusPacket)

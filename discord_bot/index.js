@@ -39,7 +39,6 @@ for (const file of eventFiles) {
     if (event.once) {
         client.once(event.name, (...args) => event.execute(...args));
     } else {
-        console.log("event fired wow");
         client.on(event.name, (...args) => event.execute(...args));
     }
 }
