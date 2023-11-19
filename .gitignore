@@ -7,3 +7,5 @@ pcm
 finalized/*
 __pycache__
 transcription.txt
+pyrightconfig.json
+transcription_service/transcription.txt
