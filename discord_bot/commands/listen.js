@@ -30,9 +30,11 @@ module.exports = {
             getFile.createListeningStream(connection.receiver, userId, username, filename);
         });
         
-        const guildName = interaction.member.guild.id;
-        const filename = `${guildName}-${Date.now()}.txt`
-        console.log(filename)
+        const guildId = interaction.member.guild.id;
+
+        const time = new Date();
+        timestamp = time.toISOString().slice(0,19).replace("T", " "); //formatting timestamp
+        const filename = `${guildId}--${timestamp}.txt`
         await interaction.reply('I am listening......');
     }
 }

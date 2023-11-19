@@ -60,7 +60,7 @@ def handle_client(client_socket):
 
     wav_data = wav_buffer.getvalue()
     print("starting transcription...")
-    transcribe(pipe, wav_data, username)
+    transcribe(pipe, wav_data, username, filename)
     print("closed connection")
 
 def main():
