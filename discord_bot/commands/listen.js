@@ -3,6 +3,10 @@ const { getVoiceConnection } = require('@discordjs/voice');
 const getFile = require("../helpers/listeningStream");
 const { joinVoiceChannel } = require('@discordjs/voice');
 
+/*
+    Bot joins voice channel and listens for audio streams from different memebrs.
+    If an audio stream is detected, it calls createListeningStream on the audio stream.
+*/
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('listen')
@@ -30,8 +34,8 @@ module.exports = {
             getFile.createListeningStream(connection.receiver, userId, username, filename);
         });
         
+        //gets the guild ID and time and sets the filename that we want to send
         const guildId = interaction.member.guild.id;
-
         const time = new Date();
         timestamp = time.toISOString().slice(0,19).replace("T", " "); //formatting timestamp
         const filename = `${guildId}--${timestamp}.txt`

@@ -15,13 +15,13 @@ const client = new Client({
     ],
 });
 
+//gets the commands from the commands directory
 client.commands = new Collection();
-
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 for(const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
-    const command = require(filePath); //returns array of files in commands directory
+    const command = require(filePath); 
 
     //checks if data and execute are in the command files for error handling
     if('data' in command && 'execute' in command) {
@@ -31,6 +31,7 @@ for(const file of commandFiles) {
     }
 }
 
+//gets the events from the events directory and executes them
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 for (const file of eventFiles) {

@@ -13,7 +13,6 @@ ADDR = (IP, PORT)
 
 # preload the pipeline
 device = "cpu"
-
 pipe = pipeline(
     "automatic-speech-recognition",
     model="openai/whisper-small",
@@ -25,21 +24,22 @@ width = 2
 channels = 2
 frame_rate = 48000
 
+# This is listening for a connection from the discord bot audio stream to handle
 def handle_client(client_socket):
-    # first packet you recieve should be the username packet according to TCP
-    # This packet has a custom header with the first 4 bytes explaining the username
+    # decode the username packet first and store in username
     username_header = client_socket.recv(4)
     username_length = int.from_bytes(username_header, byteorder='little')
     encoded_username = client_socket.recv(username_length)
     username = encoded_username.decode('utf-8')
 
+    # decode the filname packet second and store in filename
     filename_header = client_socket.recv(4)
     filename_length = int.from_bytes(filename_header, byteorder='little')
     encoded_filename = client_socket.recv(filename_length)
     filename = encoded_filename.decode('utf-8')
-
     print(f'Name: {username} Filename: {filename}')
 
+    # Put audio packets together
     data = b''
     try:
         while True:
@@ -51,14 +51,16 @@ def handle_client(client_socket):
         pass
     client_socket.close()
 
+    # convert to wav
     wav_buffer = io.BytesIO()
     with wave.open(wav_buffer, 'wb') as wave_file:
         wave_file.setnchannels(channels)
         wave_file.setsampwidth(width)
         wave_file.setframerate(frame_rate)
         wave_file.writeframes(data)
-
     wav_data = wav_buffer.getvalue()
+
+    # Transcribe wav file
     print("starting transcription...")
     transcribe(pipe, wav_data, username, filename)
     print("closed connection")
@@ -67,9 +69,9 @@ def main():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind(ADDR)
     server_socket.listen(5)
-
     print(f"Audio is now listening for connections... on {ADDR}")
 
+    # Waiting for a audio stream from discord_bot and send over to handle_client thread
     try:
         while True:
             client_socket, client_address = server_socket.accept()

@@ -1,5 +1,6 @@
 const { Events } = require('discord.js');
 
+//Detects when memebrs join of leave voice channel
 module.exports = {
     name: Events.VoiceStateUpdate,
     execute(oldState, newState) {

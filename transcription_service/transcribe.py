@@ -1,7 +1,7 @@
 from transformers import pipeline
 
+# Transcribe data using the pipeline from handle_packet
 def transcribe(pipe, data, username, filename):
-
     output_file = f"transcriptions/{filename}.txt"
     transcription = pipe(data, batch_size=8)["text"]
 

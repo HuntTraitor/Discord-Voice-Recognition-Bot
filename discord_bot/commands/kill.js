@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, VoiceChannel } = require('discord.js');
 const { getVoiceConnection } = require('@discordjs/voice')
 
+//Leaves the voice channel
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('leave')
