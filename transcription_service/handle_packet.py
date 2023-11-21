@@ -6,20 +6,33 @@ from transcribe import transcribe
 import io
 from transformers import pipeline
 from datetime import datetime
+import torch
+import warnings
+
+# Ignore the efficiency warning, there is no way to fix it and it has no impact on performance
+warnings.filterwarnings("ignore", category=UserWarning, module="transformers")
 
 PORT = 8010
 IP = socket.gethostbyname(socket.gethostname())
 ADDR = (IP, PORT)
 
+# Test to see if you are using a GPU for transcription
+try:
+    num_gpus = torch.cuda.device_count()
+    for i in range(torch.cuda.device_count()):
+        gpu_names = [(f"cuda:{i}", torch.cuda.get_device_name(i))]
+    print("Available GPU(s):", gpu_names)
+except:
+    print("ERROR: CUDA not available")
+
 # preload the pipeline
-device = "cpu"
+device = "cuda:0" # <- CHOOSE THIS VALUE FROM OUTPUT ABOVE
 pipe = pipeline(
     "automatic-speech-recognition",
-    model="openai/whisper-small",
+    model="openai/whisper-large",
     chunk_length_s=30,
     device=device
 )
-
 width = 2
 channels = 2
 frame_rate = 48000
@@ -37,7 +50,6 @@ def handle_client(client_socket):
     filename_length = int.from_bytes(filename_header, byteorder='little')
     encoded_filename = client_socket.recv(filename_length)
     filename = encoded_filename.decode('utf-8')
-    print(f'Name: {username} Filename: {filename}')
 
     # Put audio packets together
     data = b''
@@ -82,6 +94,8 @@ def main():
     except KeyboardInterrupt:  
         print("Exiting...")
         server_socket.close()
+    finally:
+        warnings.resetwarnings()
         sys.exit(0)
 
 if __name__ == '__main__':

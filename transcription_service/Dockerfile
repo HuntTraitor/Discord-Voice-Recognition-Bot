@@ -1,5 +1,4 @@
-FROM python:3.10-slim
-
+FROM tensorflow/tensorflow:latest-gpu
 WORKDIR /app
 
 COPY requirements.txt ./
