@@ -51,6 +51,8 @@ def handle_client(client_socket):
     encoded_filename = client_socket.recv(filename_length)
     filename = encoded_filename.decode('utf-8')
 
+    ts_start = datetime.timestamp(datetime.now())
+
     # Put audio packets together
     data = b''
     try:
@@ -72,30 +74,30 @@ def handle_client(client_socket):
         wave_file.writeframes(data)
     wav_data = wav_buffer.getvalue()
 
+    ts_end = datetime.timestamp(datetime.now())
+
     # Transcribe wav file
     print("starting transcription...")
-    transcribe(pipe, wav_data, username, filename)
+    transcribe(pipe, wav_data, username, filename, [ts_start, ts_end])
     print("closed connection")
 
 def main():
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind(ADDR)
-    server_socket.listen(5)
-    print(f"Audio is now listening for connections... on {ADDR}")
+    try:
+        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server_socket.bind(ADDR)
+        server_socket.listen(5)
+        print(f"Audio is now listening for connections... on {ADDR}")
 
     # Waiting for a audio stream from discord_bot and send over to handle_client thread
-    try:
         while True:
             client_socket, client_address = server_socket.accept()
             print(f"Accepted connection from {client_address}")
             client_handler = threading.Thread(target=handle_client, args=(client_socket,))
             client_handler.daemon = True
             client_handler.start()
-    except KeyboardInterrupt:  
+    except KeyboardInterrupt:
         print("Exiting...")
         server_socket.close()
-    finally:
-        warnings.resetwarnings()
         sys.exit(0)
 
 if __name__ == '__main__':
