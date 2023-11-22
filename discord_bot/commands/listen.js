@@ -26,7 +26,7 @@ module.exports = {
         }
         const voiceChannel = member.voice.channel;
         const connection = getVoiceConnection(interaction.guild.id);
-        connection.receiver.speaking.on('start', (userId) => {
+        connection.receiver.speaking.on('start', (userId) => { //SHOULD WE HANDLE SOCKETS HERE AND JUST PASS THE SOCKET????
             //get the username
             const guildMember = voiceChannel.guild.members.cache.get(userId);
             const username = guildMember.displayName || guildMember.user.username;

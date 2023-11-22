@@ -11,9 +11,11 @@ services:
         ipv4_address: 10.10.0.2
     container_name: bot
     command: tail -f /dev/null
-  
-  transcription-service:
-    build: ./transcription_service/.
+
+  transcription-service-cpu:
+    build:
+      context: ./transcription_service
+      dockerfile: Dockerfile-cpu
     ports:
       - "8010:8010"
     volumes:
@@ -21,6 +23,24 @@ services:
     networks:
       discord:
         ipv4_address: 10.10.0.3
+    profiles:
+      - cpu
+    container_name: transcription
+    command: tail -f /dev/null
+  
+  transcription-service-gpu:
+    build:
+      context: ./transcription_service
+      dockerfile: Dockerfile-gpu
+    ports:
+      - "8010:8010"
+    volumes:
+      - "./transcription_service/.:/app"
+    networks:
+      discord:
+        ipv4_address: 10.10.0.3
+    profiles:
+      - gpu
     deploy:
       resources:
         reservations:

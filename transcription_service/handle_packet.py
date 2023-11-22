@@ -22,14 +22,18 @@ try:
     for i in range(torch.cuda.device_count()):
         gpu_names = [(f"cuda:{i}", torch.cuda.get_device_name(i))]
     print("Available GPU(s):", gpu_names)
+    device = gpu_names[0][0]
+    model = "openai/whisper-large"
 except:
     print("ERROR: CUDA not available")
+    device="cpu"
+    model = "openai/whisper-small"
+    pass
 
 # preload the pipeline
-device = "cuda:0" # <- CHOOSE THIS VALUE FROM OUTPUT ABOVE
 pipe = pipeline(
     "automatic-speech-recognition",
-    model="openai/whisper-large",
+    model=model,
     chunk_length_s=30,
     device=device
 )
