@@ -4,9 +4,9 @@ if [ "$#" -eq 0 ]; then
 fi
 
 if [ "$1" == "up" ]; then
-    docker-compose --profile gpu up -d
+    docker-compose --profile cpu up -d
 elif [ "$1" == "down" ]; then
-    docker-compose --profile gpu down
+    docker-compose --profile cpu down
 else
     echo "Unkown parameter: $1"
     exit 1
