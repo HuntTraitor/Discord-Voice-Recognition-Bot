@@ -1,12 +1,11 @@
 import wave
 import io
 
-def convert_audio(data, channels, width, frame_rate):
+def convert_audio(data):
     wav_buffer = io.BytesIO()
-    with wave.open(wav_buffer, 'wb') as wave_file:
-        wave_file.setnchannels(channels)
-        wave_file.setsampwidth(width)
-        wave_file.setframerate(frame_rate)
-        wave_file.writeframes(data)
-    wav_buffer.seek(0)
+    with wave.open(wav_buffer, 'wb') as wav_file:
+        wav_file.setnchannels(2)
+        wav_file.setsampwidth(2)
+        wav_file.setframerate(48000)
+        wav_file.writeframes(data)
     return wav_buffer

@@ -40,6 +40,9 @@ def handle_client(client_socket):
         client_socket.close()
     ts_end = datetime.timestamp(datetime.now())
 
+    audio_file = convert_audio(data)
+    transcribe(audio_file, username, filename, [ts_start, ts_end])
+
 
 def main():
     try:

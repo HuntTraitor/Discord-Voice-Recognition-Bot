@@ -9,4 +9,3 @@ __pycache__
 transcription.txt
 pyrightconfig.json
 transcription_service/transcription.txt
-transcription_service/transcriptions/*
