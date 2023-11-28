@@ -1,15 +1,13 @@
 from openai import OpenAI
 import os
-from dotenv import load_dotenv
 import tempfile
 from pathlib import Path
-
-load_dotenv()
+from check_words import validTranscription
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 client = OpenAI(api_key=OPENAI_API_KEY)
 
-def transcribe(audio_file, username, filename, timestamps):
+def transcribe(audio_file, username, filename):
     output_file = f"transcriptions/{filename}"
 
     with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_wav_file:
@@ -22,9 +20,11 @@ def transcribe(audio_file, username, filename, timestamps):
                 model = "whisper-1",
                 file = temp_wav_path
             )
+        except Exception as e:
+            print(f"Error during transcription API call: {e}")
         finally:
             temp_wav_path.unlink()
 
     with open(output_file, 'a+') as output_file:
-        output_file.write(f"{timestamps[0]} - {username}: {transcription.text} - {timestamps[1]}\n")
-    
+        if validTranscription(transcription.text):
+            output_file.write(f"{username}: {transcription.text}\n")
