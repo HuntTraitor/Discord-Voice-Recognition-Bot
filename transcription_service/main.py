@@ -1,14 +1,9 @@
 import socket
 import threading
 import sys
+from config import ADDR
 from transcribe import transcribe
 from convert_to_wav import convert_audio
-from dotenv import load_dotenv
-
-PORT = 8010
-IP = socket.gethostbyname(socket.gethostname())
-ADDR = (IP, PORT)
-
 
 # This is listening for a connection from the discord bot audio stream to handle
 def handle_client(client_socket):
@@ -42,11 +37,6 @@ def handle_client(client_socket):
 
 
 def main():
-    # loading env files
-    try:
-        load_dotenv()
-    except:
-        print("Error: Failed to load env variables.")
 
     # main thread
     try:

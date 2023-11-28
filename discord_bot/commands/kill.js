@@ -15,6 +15,7 @@ module.exports = {
             const connection = getVoiceConnection(guild.id);
             if (connection) {
                 connection.destroy();
+                // upload_file(filename, guild.id);
                 await interaction.reply(`Left voice Channel.`);
             } else {
                 await interaction.reply(`Im not in a voice channel bruh.`);

@@ -1,13 +1,17 @@
 from openai import OpenAI
-import os
+from config import OPENAI_API_KEY
 import tempfile
 from pathlib import Path
 from check_words import validTranscription
 
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-client = OpenAI(api_key=OPENAI_API_KEY)
-
 def transcribe(audio_file, username, filename):
+
+    try:
+        client = OpenAI(api_key=OPENAI_API_KEY)
+    except Exception as e:
+        print(f"Error: Invalid API KEY - {e}")
+        exit()
+
     output_file = f"transcriptions/{filename}"
 
     with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_wav_file:

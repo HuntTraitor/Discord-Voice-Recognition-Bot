@@ -3,3 +3,5 @@ watchdog
 pydub
 openai
 python-dotenv
+boto3
+FLask

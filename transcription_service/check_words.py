@@ -1,7 +1,4 @@
-AVOIDED_WORDS = [
-    "MBC 뉴스 이덕영입니다.",
-    "지금까지 신선한 경제였습니다."
-]
+from config import AVOIDED_WORDS
 
 # Helps with filetering out garbage
 def validTranscription(text):
