@@ -10,7 +10,7 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 def transcribe(audio_file, username, filename, timestamps):
-    output_file = f"transcriptions/{filename}.txt"
+    output_file = f"transcriptions/{filename}"
 
     with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_wav_file:
         temp_wav_file.write(audio_file.getvalue())
@@ -25,7 +25,6 @@ def transcribe(audio_file, username, filename, timestamps):
         finally:
             temp_wav_path.unlink()
 
-    print(transcription)
     with open(output_file, 'a+') as output_file:
-        output_file.write(f"{timestamps[0]} - {username}: {transcription.text} = {timestamps[1]}\n")
+        output_file.write(f"{timestamps[0]} - {username}: {transcription.text} - {timestamps[1]}\n")
     
