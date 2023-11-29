@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, VoiceChannel } = require('discord.js');
 const { getVoiceConnection } = require('@discordjs/voice')
+const https = require('https')
 
 //Leaves the voice channel
 module.exports = {
@@ -15,7 +16,22 @@ module.exports = {
             const connection = getVoiceConnection(guild.id);
             if (connection) {
                 connection.destroy();
-                // upload_file(filename, guild.id);
+
+                fetch("http://10.10.0.3:8000/upload", {
+                    method: "PUT",
+                    body: JSON.stringify({
+                        guild: guild.id
+                    }),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+                    .then((response) => response.json())
+                    .then((json) => console.log(json))
+                    .catch(error => {
+                        console.error("Error sending request to upload API: ", error);
+                    });
+
                 await interaction.reply(`Left voice Channel.`);
             } else {
                 await interaction.reply(`Im not in a voice channel bruh.`);
