@@ -2,8 +2,8 @@ import socket
 import threading
 import sys
 from config import ADDR
-from transcribe import transcribe
-from convert_to_wav import convert_audio
+from src.transcribe import transcribe
+from src.convert_to_wav import convert_audio
 
 # This is listening for a connection from the discord bot audio stream to handle
 def handle_client(client_socket):

@@ -2,7 +2,7 @@ from openai import OpenAI
 from config import OPENAI_API_KEY
 import tempfile
 from pathlib import Path
-from check_words import validTranscription
+from .check_words import validTranscription
 
 def transcribe(audio_file, username, filename):
 
