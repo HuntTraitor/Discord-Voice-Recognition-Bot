@@ -1,7 +1,8 @@
 setuptools-rust
 watchdog
-pydub
-openai
+transformers
+torch
+torchaudio
 python-dotenv
 boto3
-FLask
+Flask

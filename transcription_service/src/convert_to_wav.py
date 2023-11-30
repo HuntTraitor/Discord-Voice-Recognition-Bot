@@ -3,13 +3,11 @@ import io
 
 #Have to convert audio to wav for transcription API
 def convert_audio(data):
-    try:
-        wav_buffer = io.BytesIO()
-        with wave.open(wav_buffer, 'wb') as wav_file:
-            wav_file.setnchannels(2)
-            wav_file.setsampwidth(2)
-            wav_file.setframerate(48000)
-            wav_file.writeframes(data)
-        return wav_buffer
-    except Exception as e:
-        print(f"Error while converting to WAV: {e}")
+    wav_buffer = io.BytesIO()
+    with wave.open(wav_buffer, 'wb') as wave_file:
+        wave_file.setnchannels(2)
+        wave_file.setsampwidth(2)
+        wave_file.setframerate(48000)
+        wave_file.writeframes(data)
+    wav_data = wav_buffer.getvalue()
+    return wav_data

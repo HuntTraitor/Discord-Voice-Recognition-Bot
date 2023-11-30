@@ -1,9 +1,33 @@
 import socket
 import threading
 import sys
+import warnings
+import torch
+import wave
+import io
 from config import ADDR
+from transformers import pipeline
 from src.transcribe import transcribe
 from src.convert_to_wav import convert_audio
+
+warnings.filterwarnings("ignore", category=UserWarning, module="transformers")
+
+try:
+    num_gpus = torch.cuda.device_count()
+    for i in range(torch.cuda.device_count()):
+        gpu_names = [(f"cuda:{i}", torch.cuda.get_device_name(i))]
+    print("Available GPU(s):", gpu_names)
+    device = gpu_names[0][0]
+except:
+    print("ERROR: cuda not available")
+
+device = device
+pipe = pipeline(
+    "automatic-speech-recognition",
+    model="openai/whisper-large",
+    chunk_length_s=30,
+    device = device
+)
 
 # This is listening for a connection from the discord bot audio stream to handle
 def handle_client(client_socket):
@@ -32,8 +56,8 @@ def handle_client(client_socket):
     finally:
         client_socket.close()
 
-    audio_file = convert_audio(data)
-    transcribe(audio_file, username, filename)
+    wav_data = convert_audio(data)
+    transcribe(pipe, wav_data, username, filename)
 
 
 def main():
@@ -41,6 +65,7 @@ def main():
     # main thread
     try:
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_socket.bind(ADDR)
         server_socket.listen(5)
         print(f"Audio is now listening for connections... on {ADDR}")

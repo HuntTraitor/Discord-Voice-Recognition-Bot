@@ -32,7 +32,7 @@ module.exports = {
                         console.error("Error sending request to upload API: ", error);
                     });
 
-                await interaction.reply(`Left voice Channel.`);
+                await interaction.reply(`https://media.tenor.com/JBCYX4zLffgAAAAC/peace-disappear.gif`);
             } else {
                 await interaction.reply(`Im not in a voice channel bruh.`);
             }

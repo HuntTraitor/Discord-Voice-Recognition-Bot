@@ -16,11 +16,19 @@ services:
     build: ./transcription_service/.
     ports:
       - "8010:8010"
+      - "8000:8000"
     volumes:
       - "./transcription_service/.:/app"
     networks:
       discord:
         ipv4_address: 10.10.0.3
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     container_name: transcription
     command: tail -f /dev/null
   

@@ -31,7 +31,8 @@ module.exports = {
             const guildMember = voiceChannel.guild.members.cache.get(userId);
             const username = guildMember.displayName || guildMember.user.username;
 
-            getFile.createListeningStream(connection.receiver, userId, username, filename);
+            //create socket here and pass it to avoid bug maybe haha
+            getFile.createListeningStream(connection.receiver, userId, username, filename); //create socket here and pass it
         });
         
         //gets the guild ID and time and sets the filename that we want to send
@@ -39,6 +40,6 @@ module.exports = {
         const time = new Date();
         timestamp = time.toISOString().slice(0,19).replace("T", " "); //formatting timestamp
         const filename = `${guildId}--${timestamp}.txt`
-        await interaction.reply('I am listening......');
+        await interaction.reply('🔥🔥✍🔥🔥Now Transcribing🔥🔥✍🔥🔥');
     }
 }

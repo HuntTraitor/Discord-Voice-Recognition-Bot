@@ -9,9 +9,13 @@ function createListeningStream(receiver, userId, username, filename) {
     const opusStream = receiver.subscribe(userId, {
         end: {
             behavior: EndBehaviorType.AfterSilence,
-            duration: 200,
+            duration: 450,
         },
     });
+
+    /*
+    What I think might be happening is the socket is being created but not being connected to for some reason. So when we destroy the socket, it still works but no audio data is being passed
+    */
 
     const socket = new net.Socket();
     let ip = '10.10.0.3';

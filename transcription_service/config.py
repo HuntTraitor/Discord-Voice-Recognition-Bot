@@ -16,6 +16,10 @@ ADDR = (IP, PORT)
 
 # WORD SPECIFIC GLOBALS
 AVOIDED_WORDS = [
-    "MBC 뉴스 이덕영입니다.",
-    "지금까지 신선한 경제였습니다."
+    "MBC",
+    "뉴스",
+    "이덕영입니다."
+    "지금까지",
+    "신선한",
+    "경제였습니다."
 ]
